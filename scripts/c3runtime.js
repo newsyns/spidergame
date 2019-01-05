@@ -543,7 +543,9 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Text,
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.System.Cnds.OnLayoutStart,
+		C3.Plugins.Multiplayer.Acts.AddClientInputValue,
 		C3.Plugins.Multiplayer.Acts.SyncObject,
+		C3.Plugins.Multiplayer.Acts.SyncObjectInstanceVar,
 		C3.Plugins.Multiplayer.Acts.SignallingConnect,
 		C3.Plugins.Multiplayer.Cnds.IsSupported,
 		C3.Plugins.Text.Acts.SetText,
@@ -552,6 +554,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Multiplayer.Cnds.OnSignallingLoggedIn,
 		C3.Plugins.Multiplayer.Acts.SignallingJoinRoom,
 		C3.Plugins.Multiplayer.Cnds.OnSignallingJoinedRoom,
+		C3.Plugins.Multiplayer.Exps.CurrentRoom,
 		C3.Plugins.Multiplayer.Cnds.IsHost,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.Multiplayer.Exps.MyID,
@@ -587,10 +590,17 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Acts.SetAngle,
 		C3.Plugins.Sprite.Exps.Angle,
 		C3.Behaviors.scrollto.Acts.Shake,
+		C3.Plugins.Sprite.Cnds.OnCollision,
+		C3.Plugins.System.Cnds.Every,
+		C3.Plugins.Multiplayer.Exps.PeerState,
+		C3.Plugins.System.Cnds.Compare,
+		C3.Plugins.System.Exps.getbit,
 		C3.Plugins.Sprite.Cnds.OnCreated,
 		C3.Plugins.Multiplayer.Acts.InputPredictObject,
-		C3.Plugins.Sprite.Cnds.OnCollision,
-		C3.Plugins.System.Cnds.Every
+		C3.Plugins.Multiplayer.Cnds.OnClientUpdate,
+		C3.Plugins.System.Exps.setbit,
+		C3.Plugins.System.Cnds.Else,
+		C3.Plugins.Multiplayer.Acts.SetClientState
 	];
 };
 
@@ -691,16 +701,21 @@ self.C3_GetObjectRefTable = function () {
 
 	self.C3_ExpressionFuncs = [
 		() => "SIGNALLING",
+() => "INPUTS",
 () => "wss://multiplayer.scirra.com",
-() => "conecter",
-() => "non connecter",
-() => "connecter au serveur",
+() => "Multiplayer supporté",
+() => "Multiplayer non supporté",
+() => "connecter au serveur de signalling",
 () => "tester",
 () => "loged in",
 () => "spider",
 () => "default",
 () => "ROOM1",
-() => 2,
+() => 3,
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+return () => (f0() + " JOINED");
+},
 () => "HOST",
 p => {
 const f0 = p._GetNode(0).GetBoundMethod();
@@ -733,7 +748,7 @@ const f0 = p._GetNode(0).GetBoundMethod();
 const f1 = p._GetNode(1).GetBoundMethod();
 return () => C3.lerp(f0(), 1, (1.1 * f1()));
 },
-() => "zoom",
+() => "zoom2",
 p => {
 const n0 = p._GetNode(0);
 return () => (n0.ExpObject() + 900);
@@ -747,7 +762,7 @@ const f0 = p._GetNode(0).GetBoundMethod();
 const f1 = p._GetNode(1).GetBoundMethod();
 return () => C3.lerp(f0(), 0.1, (1.1 * f1()));
 },
-() => "fire",
+() => "fire2",
 () => 1,
 p => {
 const f0 = p._GetNode(0).GetBoundMethod();
@@ -757,11 +772,77 @@ return () => f0((n1.ExpObject() - 20), n2.ExpObject());
 },
 () => 40,
 () => 0.3,
+() => 10,
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+const f1 = p._GetNode(1).GetBoundMethod();
+return () => f0(f1(), "INPUTS");
+},
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+const n1 = p._GetNode(1);
+return () => f0(n1.ExpInstVar(), 0);
+},
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+const n1 = p._GetNode(1);
+return () => f0(n1.ExpInstVar(), 1);
+},
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+const n1 = p._GetNode(1);
+return () => f0(n1.ExpInstVar(), 2);
+},
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+const n1 = p._GetNode(1);
+return () => f0(n1.ExpInstVar(), 3);
+},
+() => "PEER_CONTROLS",
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+const n1 = p._GetNode(1);
+return () => f0(n1.ExpInstVar(), 0, 1);
+},
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+const n1 = p._GetNode(1);
+return () => f0(n1.ExpInstVar(), 0, 0);
+},
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+const n1 = p._GetNode(1);
+return () => f0(n1.ExpInstVar(), 1, 1);
+},
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+const n1 = p._GetNode(1);
+return () => f0(n1.ExpInstVar(), 1, 0);
+},
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+const n1 = p._GetNode(1);
+return () => f0(n1.ExpInstVar(), 2, 1);
+},
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+const n1 = p._GetNode(1);
+return () => f0(n1.ExpInstVar(), 2, 0);
+},
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+const n1 = p._GetNode(1);
+return () => f0(n1.ExpInstVar(), 3, 1);
+},
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+const n1 = p._GetNode(1);
+return () => f0(n1.ExpInstVar(), 3, 0);
+},
 p => {
 const n0 = p._GetNode(0);
 return () => n0.ExpInstVar();
-},
-() => 10
+}
 	];
 }
 
