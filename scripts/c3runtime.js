@@ -542,35 +542,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Multiplayer,
 		C3.Plugins.Text,
 		C3.Plugins.System.Cnds.IsGroupActive,
-		C3.Plugins.Keyboard.Cnds.IsKeyDown,
-		C3.Behaviors.EightDir.Acts.SimulateControl,
-		C3.Plugins.Sprite.Cnds.CompareX,
-		C3.Plugins.Sprite.Exps.X,
-		C3.Plugins.Sprite.Cnds.CompareY,
-		C3.Plugins.Sprite.Exps.Y,
-		C3.Plugins.System.Acts.SetLayoutScale,
-		C3.Plugins.System.Exps.layoutscale,
-		C3.Plugins.System.Exps.dt,
-		C3.Plugins.System.Cnds.EveryTick,
-		C3.Plugins.Sprite.Acts.SetPos,
-		C3.Plugins.Sprite.Acts.SetTowardPosition,
-		C3.Plugins.Mouse.Exps.X,
-		C3.Plugins.Mouse.Exps.Y,
-		C3.Plugins.System.Acts.Scroll,
-		C3.Plugins.System.Exps.scrollx,
-		C3.Plugins.System.Exps.scrolly,
-		C3.Plugins.Sprite.Acts.SetPosToObject,
-		C3.Behaviors.scrollto.Acts.SetEnabled,
-		C3.Plugins.Mouse.Cnds.IsButtonDown,
-		C3.Plugins.Sprite.Acts.Spawn,
-		C3.Plugins.Sprite.Acts.SetAngle,
-		C3.Plugins.System.Exps.random,
-		C3.Plugins.Sprite.Exps.Angle,
-		C3.Behaviors.scrollto.Acts.Shake,
-		C3.Plugins.Sprite.Cnds.OnCollision,
-		C3.Plugins.Sprite.Acts.Destroy,
-		C3.Plugins.System.Cnds.Every,
-		C3.Plugins.System.Acts.CreateObject,
 		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.Plugins.Multiplayer.Acts.SyncObject,
 		C3.Plugins.Multiplayer.Acts.SignallingConnect,
@@ -585,7 +556,41 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.Multiplayer.Exps.MyID,
 		C3.Plugins.Multiplayer.Acts.AssociateObjectWithPeer,
-		C3.Plugins.System.Acts.SetGroupActive
+		C3.Plugins.System.Acts.SetGroupActive,
+		C3.Plugins.Sprite.Acts.Destroy,
+		C3.Plugins.Multiplayer.Cnds.OnPeerConnected,
+		C3.Plugins.System.Acts.CreateObject,
+		C3.Plugins.System.Exps.random,
+		C3.Plugins.Multiplayer.Exps.PeerID,
+		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
+		C3.Plugins.Keyboard.Cnds.IsKeyDown,
+		C3.Behaviors.EightDir.Acts.SimulateControl,
+		C3.Plugins.System.Cnds.EveryTick,
+		C3.Plugins.Sprite.Acts.SetPos,
+		C3.Plugins.Sprite.Exps.X,
+		C3.Plugins.Sprite.Exps.Y,
+		C3.Plugins.Sprite.Acts.SetTowardPosition,
+		C3.Plugins.Mouse.Exps.X,
+		C3.Plugins.Mouse.Exps.Y,
+		C3.Plugins.System.Acts.Scroll,
+		C3.Plugins.System.Exps.scrollx,
+		C3.Plugins.System.Exps.scrolly,
+		C3.Plugins.System.Acts.SetLayoutScale,
+		C3.Plugins.System.Exps.layoutscale,
+		C3.Plugins.System.Exps.dt,
+		C3.Plugins.Sprite.Acts.SetPosToObject,
+		C3.Behaviors.scrollto.Acts.SetEnabled,
+		C3.Plugins.Sprite.Cnds.CompareX,
+		C3.Plugins.Sprite.Cnds.CompareY,
+		C3.Plugins.Mouse.Cnds.IsButtonDown,
+		C3.Plugins.Sprite.Acts.Spawn,
+		C3.Plugins.Sprite.Acts.SetAngle,
+		C3.Plugins.Sprite.Exps.Angle,
+		C3.Behaviors.scrollto.Acts.Shake,
+		C3.Plugins.Sprite.Cnds.OnCreated,
+		C3.Plugins.Multiplayer.Acts.InputPredictObject,
+		C3.Plugins.Sprite.Cnds.OnCollision,
+		C3.Plugins.System.Cnds.Every
 	];
 };
 
@@ -685,7 +690,49 @@ self.C3_GetObjectRefTable = function () {
 	}
 
 	self.C3_ExpressionFuncs = [
-		() => "direction",
+		() => "SIGNALLING",
+() => "wss://multiplayer.scirra.com",
+() => "conecter",
+() => "non connecter",
+() => "connecter au serveur",
+() => "tester",
+() => "loged in",
+() => "spider",
+() => "default",
+() => "ROOM1",
+() => 2,
+() => "HOST",
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+return () => f0();
+},
+() => "Multiplayer.MyID",
+() => "PEER",
+() => 0,
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+return () => f0(0, 3840);
+},
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+return () => f0(0, 2160);
+},
+() => "Multiplayer.PeerID",
+() => "HOST_CONTROLS",
+p => {
+const n0 = p._GetNode(0);
+return () => n0.ExpObject();
+},
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+const n1 = p._GetNode(1);
+return () => C3.lerp(f0(), n1.ExpObject(), 0.1);
+},
+p => {
+const f0 = p._GetNode(0).GetBoundMethod();
+const f1 = p._GetNode(1).GetBoundMethod();
+return () => C3.lerp(f0(), 1, (1.1 * f1()));
+},
 () => "zoom",
 p => {
 const n0 = p._GetNode(0);
@@ -700,25 +747,6 @@ const f0 = p._GetNode(0).GetBoundMethod();
 const f1 = p._GetNode(1).GetBoundMethod();
 return () => C3.lerp(f0(), 0.1, (1.1 * f1()));
 },
-p => {
-const n0 = p._GetNode(0);
-return () => n0.ExpObject();
-},
-p => {
-const f0 = p._GetNode(0).GetBoundMethod();
-return () => f0();
-},
-p => {
-const f0 = p._GetNode(0).GetBoundMethod();
-const n1 = p._GetNode(1);
-return () => C3.lerp(f0(), n1.ExpObject(), 0.1);
-},
-p => {
-const f0 = p._GetNode(0).GetBoundMethod();
-const f1 = p._GetNode(1).GetBoundMethod();
-return () => C3.lerp(f0(), 1, (1.1 * f1()));
-},
-() => 0,
 () => "fire",
 () => 1,
 p => {
@@ -729,29 +757,11 @@ return () => f0((n1.ExpObject() - 20), n2.ExpObject());
 },
 () => 40,
 () => 0.3,
-() => 10,
 p => {
-const f0 = p._GetNode(0).GetBoundMethod();
-return () => f0(0, 3840);
+const n0 = p._GetNode(0);
+return () => n0.ExpInstVar();
 },
-p => {
-const f0 = p._GetNode(0).GetBoundMethod();
-return () => f0(0, 2160);
-},
-() => "SIGNALLING",
-() => "wss://multiplayer.scirra.com",
-() => "conecter",
-() => "non connecter",
-() => "connecter au serveur",
-() => "tester",
-() => "loged in",
-() => "spider",
-() => "default",
-() => "ROOM1",
-() => 2,
-() => "HOST",
-() => "Multiplayer.MyID",
-() => "PEER"
+() => 10
 	];
 }
 
